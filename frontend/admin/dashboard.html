@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | ASMIS</title>
     <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .admin-layout {
             display: grid;
@@ -13,32 +15,32 @@
             min-height: 100vh;
         }
 
-        sidebar {
+        aside {
             background: #050505;
             padding: 2rem;
             border-right: 1px solid var(--glass-border);
         }
 
-        sidebar h3 {
+        aside h3 {
             color: var(--primary);
             margin-bottom: 2rem;
         }
 
-        sidebar ul {
+        aside ul {
             list-style: none;
         }
 
-        sidebar li {
+        aside li {
             margin-bottom: 1rem;
         }
 
-        sidebar a {
+        aside a {
             color: #888;
             text-decoration: none;
             font-size: 0.9rem;
         }
 
-        sidebar a.active {
+        aside a.active {
             color: var(--primary);
             font-weight: 700;
         }
@@ -89,7 +91,7 @@
 
 <body>
     <div class="admin-layout">
-        <sidebar>
+        <aside>
             <h3>ASMIS ADMIN</h3>
             <ul>
                 <li><a href="dashboard.html" class="active">Applicants</a></li>
@@ -98,7 +100,7 @@
                 <li><a href="../media.html">Public Gallery</a></li>
                 <li style="margin-top: 2rem;"><a href="../index.html" style="color: #666;">← Back to Home</a></li>
             </ul>
-        </sidebar>
+        </aside>
         <div class="content">
             <header style="position: static; padding: 0; background: none; margin-bottom: 3rem;">
                 <h1>Manage Applicants</h1>
@@ -108,8 +110,23 @@
                             style="font-size: 2rem; font-weight: 800; color: var(--primary);">0</span>
                         <p style="font-size: 0.8rem; color: #666;">Total Applications</p>
                     </div>
+                    <div class="glass-panel" style="padding: 1.5rem;">
+                        <span id="approvedCount"
+                            style="font-size: 2rem; font-weight: 800; color: var(--accent);">0</span>
+                        <p style="font-size: 0.8rem; color: #666;">Approved</p>
+                    </div>
+                    <div class="glass-panel" style="padding: 1.5rem;">
+                        <span id="pendingCount"
+                            style="font-size: 2rem; font-weight: 800; color: #ffa500;">0</span>
+                        <p style="font-size: 0.8rem; color: #666;">Pending</p>
+                    </div>
                 </div>
             </header>
+
+            <div class="glass-panel" style="margin-top: 2rem;">
+                <h2>Application Status Overview</h2>
+                <canvas id="statusChart" width="400" height="200"></canvas>
+            </div>
 
             <div class="glass-panel" style="overflow-x: auto;">
                 <table id="applicantTable">

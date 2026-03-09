@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Content | ASMIS 2026</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .news-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .news-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-date {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .news-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .news-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--primary);
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .file-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #1a1a1a;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .role-selection {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .role-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover,
+        .role-card.selected {
+            border-color: var(--primary);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .role-card h3 {
+            color: var(--primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .role-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .upload-section {
+            display: none;
+        }
+
+        .upload-section.active {
+            display: block;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="../index.html" style="color: var(--primary); text-decoration: none;">ASMIS 2026</a>
+        </div>
+        <nav>
+            <a href="../index.html" style="color: white; text-decoration: none; margin-right: 20px;">Home</a>
+            
+            <a href="super-dashboard.html" style="color: white; text-decoration: none;">Dashboard</a>
+        </nav>
+    </header>
+
+    <main style="padding: 120px 10% 60px;">
+        <h1>Upload Content</h1>
+        
+        <div class="news-grid">
+            <div class="news-item">
+                <div class="role-selection">
+                    <div class="role-card" data-role="news">
+                        <h3>News Article</h3>
+                        <p>Share announcements, updates, and press releases</p>
+                    </div>
+                    <div class="role-card" data-role="gallery">
+                        <h3>Gallery Image</h3>
+                        <p>Upload photos from events and activities</p>
+                    </div>
+                </div>
+
+                <div id="news-upload" class="upload-section">
+                    <form class="upload-form" id="newsForm">
+                        <div class="form-group">
+                            <label for="newsTitle">Article Title</label>
+                            <input type="text" id="newsTitle" placeholder="Enter article title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newsDate">Publication Date</label>
+                            <input type="date" id="newsDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newsContent">Article Content</label>
+                            <textarea id="newsContent" placeholder="Write your article content here..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newsImage">Featured Image (Optional)</label>
+                            <div class="file-upload" id="newsFileUpload">
+                                <p>Click to upload or drag and drop an image</p>
+                                <input type="file" id="newsImage" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="file-preview" id="newsFilePreview"></div>
+                        </div>
+                        <button type="submit" class="submit-btn">Publish Article</button>
+                    </form>
+                </div>
+
+                <div id="gallery-upload" class="upload-section">
+                    <form class="upload-form" id="galleryForm">
+                        <div class="form-group">
+                            <label for="galleryTitle">Image Title</label>
+                            <input type="text" id="galleryTitle" placeholder="Enter image title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="galleryDate">Event Date</label>
+                            <input type="date" id="galleryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="galleryDescription">Description (Optional)</label>
+                            <textarea id="galleryDescription" placeholder="Describe the image or event"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="galleryCategory">Category</label>
+                            <select  id="galleryCategory" required>
+                                <option value="">Select category</option>
+                                <option value="events">Events</option>
+                                <option value="speakers">Speakers</option>
+                                <option value="networking">Networking</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="galleryImage">Upload Image</label>
+                            <div class="file-upload" id="galleryFileUpload">
+                                <p>Click to upload or drag and drop an image</p>
+                                <input type="file" id="galleryImage" accept="image/*" required style="display: none;">
+                            </div>
+                            <div class="file-preview" id="galleryFilePreview"></div>
+                        </div>
+                        <button type="submit" class="submit-btn">Upload Image</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Role selection
+        const roleCards = document.querySelectorAll('.role-card');
+        const uploadSections = document.querySelectorAll('.upload-section');
+
+        roleCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove selected class from all cards
+                roleCards.forEach(c => c.classList.remove('selected'));
+                // Add selected class to clicked card
+                card.classList.add('selected');
+
+                // Hide all upload sections
+                uploadSections.forEach(section => section.classList.remove('active'));
+
+                // Show selected upload section
+                const role = card.dataset.role;
+                document.getElementById(`${role}-upload`).classList.add('active');
+            });
+        });
+
+        // File upload handling
+        function setupFileUpload(uploadAreaId, fileInputId, previewId) {
+            const uploadArea = document.getElementById(uploadAreaId);
+            const fileInput = document.getElementById(fileInputId);
+            const preview = document.getElementById(previewId);
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFilePreview(fileInput, preview);
+                }
+            });
+
+            fileInput.addEventListener('change', () => {
+                handleFilePreview(fileInput, preview);
+            });
+        }
+
+        function handleFilePreview(fileInput, preview) {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // Setup file uploads
+        setupFileUpload('newsFileUpload', 'newsImage', 'newsFilePreview');
+        setupFileUpload('galleryFileUpload', 'galleryImage', 'galleryFilePreview');
+
+        // Form submissions
+        document.getElementById('newsForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('News article published successfully!');
+            // Reset form
+            e.target.reset();
+            document.getElementById('newsFilePreview').style.display = 'none';
+            roleCards.forEach(c => c.classList.remove('selected'));
+            uploadSections.forEach(section => section.classList.remove('active'));
+        });
+
+        document.getElementById('galleryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Gallery image uploaded successfully!');
+            // Reset form
+            e.target.reset();
+            document.getElementById('galleryFilePreview').style.display = 'none';
+            roleCards.forEach(c => c.classList.remove('selected'));
+            uploadSections.forEach(section => section.classList.remove('active'));
+        });
+    </script>
+</body>
+</html>

@@ -19,7 +19,7 @@ export const initDb = async () => {
       country VARCHAR(100) NOT NULL,
       organization VARCHAR(255),
       social_handle VARCHAR(255),
-      status VARCHAR(20) DEFAULT 'pending', -- pending, approved, rejected
+      status VARCHAR(20) DEFAULT 'pending', -- pending, approved, rejected, vip
       remark TEXT,
       qr_code TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -39,6 +39,14 @@ export const initDb = async () => {
       title VARCHAR(255),
       content TEXT,
       media_url TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(50) UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      role VARCHAR(20) NOT NULL, -- admin, super_admin
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;

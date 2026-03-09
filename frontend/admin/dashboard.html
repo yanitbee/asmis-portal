@@ -86,6 +86,161 @@
             background: rgba(46, 204, 113, 0.1);
             color: var(--accent);
         }
+
+        .status-rejected {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+
+        .status-vip {
+            background: rgba(155, 89, 182, 0.1);
+            color: #9b59b6;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(194, 153, 88, 0.015) 20px, rgba(194, 153, 88, 0.015) 22px),
+                repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(194, 153, 88, 0.015) 20px, rgba(194, 153, 88, 0.015) 22px),
+                linear-gradient(180deg, rgba(13, 10, 8, 0.95) 0%, rgba(26, 20, 16, 0.95) 30%, rgba(18, 14, 12, 0.95) 60%, rgba(10, 8, 6, 0.95) 100%);
+        }
+
+        .modal-content {
+            background: rgba(18, 14, 12, 0.9);
+            margin: 10% auto;
+            padding: 40px;
+            border: 2px solid rgba(194, 153, 88, 0.12);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .close:hover {
+            color: var(--primary);
+        }
+
+        .modal-content h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(194, 153, 88, 0.15);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(194, 153, 88, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #555;
+        }
+
+        .form-group select option {
+            background: #1a1612;
+            color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(180deg, #d4a95a 0%, #c29958 40%, #a07840 100%);
+            color: #120e0c;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+            box-shadow:
+                0 4px 0 #7a5c2e,
+                0 6px 10px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.15s ease;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(180deg, #e0b868 0%, #d4a95a 40%, #b08a48 100%);
+            box-shadow:
+                0 6px 0 #7a5c2e,
+                0 8px 14px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .reject-button {
+            background: linear-gradient(180deg, #e74c3c 0%, #c0392b 40%, #a93226 100%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow:
+                0 2px 0 #7a2c25,
+                0 3px 6px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.15s ease;
+        }
+
+        .reject-button:hover {
+            background: linear-gradient(180deg, #ff5c4c 0%, #e74c3c 40%, #c0392b 100%);
+            box-shadow:
+                0 3px 0 #7a2c25,
+                0 5px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 
@@ -120,12 +275,31 @@
                             style="font-size: 2rem; font-weight: 800; color: #ffa500;">0</span>
                         <p style="font-size: 0.8rem; color: #666;">Pending</p>
                     </div>
+                    <div class="glass-panel" style="padding: 1.5rem;">
+                        <span id="rejectedCount"
+                            style="font-size: 2rem; font-weight: 800; color: #e74c3c;">0</span>
+                        <p style="font-size: 0.8rem; color: #666;">Rejected</p>
+                    </div>
+                    <div class="glass-panel" style="padding: 1.5rem; display: none;" id="vipStats">
+                        <span id="vipCount"
+                            style="font-size: 2rem; font-weight: 800; color: #9b59b6;">0</span>
+                        <p style="font-size: 0.8rem; color: #666;">VIP</p>
+                    </div>
                 </div>
             </header>
 
             <div class="glass-panel" style="margin-top: 2rem;">
                 <h2>Application Status Overview</h2>
-                <canvas id="statusChart" width="400" height="200"></canvas>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3 style="text-align: center; color: var(--primary); margin-bottom: 1rem;"></h3>
+                        <canvas id="pieChart" width="300" height="200"></canvas>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h3 style="text-align: center; color: var(--primary); margin-bottom: 1rem;"></h3>
+                        <canvas id="barChart" width="300" height="200"></canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="glass-panel" style="overflow-x: auto;">
@@ -144,6 +318,83 @@
                     </tbody>
                 </table>
             </div>
+
+            <div id="adminSection" class="glass-panel" style="margin-top: 2rem; overflow-x: auto; display: none;">
+                <h2>All Admins <span id="adminCount" style="font-size: 0.8rem; color: var(--accent); font-weight: 600;">(0 total)</span></h2>
+                <table id="adminTable">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Created Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminList">
+                        <!-- Admin rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="vipSection" class="glass-panel" style="margin-top: 2rem; overflow-x: auto; display: none;">
+                <h2>All VIPs/VVIPs <span id="vipCount" style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">(0 total)</span></h2>
+                <table id="vipTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Registered Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vipList">
+                        <!-- VIP rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('adminModal')">&times;</span>
+            <h2>Create New Admin</h2>
+            <div class="form-group">
+                <label for="newAdmin">Username</label>
+                <input type="text" id="newAdmin" placeholder="New Admin Username">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" id="newPassword" placeholder="Password">
+            </div>
+            <button class="submit-btn" onclick="createAdmin()">Create Admin</button>
+        </div>
+    </div>
+
+    <div id="vipModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('vipModal')">&times;</span>
+            <h2>Register VIP/VVIP Participants</h2>
+            <div class="form-group">
+                <label for="vipName">Full Name</label>
+                <input type="text" id="vipName" placeholder="Full Name">
+            </div>
+            <div class="form-group">
+                <label for="vipEmail">Email</label>
+                <input type="email" id="vipEmail" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="vipType">Type</label>
+                <select id="vipType">
+                    <option value="VIP">VIP</option>
+                    <option value="VVIP">VVIP</option>
+                </select>
+            </div>
+            <button class="submit-btn" onclick="registerVIP()">Register</button>
         </div>
     </div>
 

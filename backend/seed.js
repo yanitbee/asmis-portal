@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -19,6 +20,21 @@ async function seed() {
     try {
         await pool.query('DELETE FROM applicants'); // Clear existing dummy data (optional but good for clean slates)
         console.log('Existing applicants cleared.');
+
+        // Seed admin users
+        const adminPassword = await bcrypt.hash('admin123', 10);
+        const superAdminPassword = await bcrypt.hash('super123', 10);
+
+        await pool.query('DELETE FROM users'); // Clear existing users
+        await pool.query(
+            'INSERT INTO users (username, password_hash, role) VALUES ($1, $2, $3)',
+            ['admin', adminPassword, 'admin']
+        );
+        await pool.query(
+            'INSERT INTO users (username, password_hash, role) VALUES ($1, $2, $3)',
+            ['superadmin', superAdminPassword, 'super_admin']
+        );
+        console.log('Admin users seeded.');
 
         for (let i = 0; i < 150; i++) {
             const country = countries[Math.floor(Math.random() * countries.length)];

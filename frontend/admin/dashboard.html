@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | ASMIS</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 100vh;
+        }
+
+        sidebar {
+            background: #050505;
+            padding: 2rem;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        sidebar ul {
+            list-style: none;
+        }
+
+        sidebar li {
+            margin-bottom: 1rem;
+        }
+
+        sidebar a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        sidebar a.active {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 3rem 5%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            color: #666;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .status-pending {
+            background: rgba(194, 153, 88, 0.1);
+            color: var(--primary);
+        }
+
+        .status-approved {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <sidebar>
+            <h3>ASMIS ADMIN</h3>
+            <ul>
+                <li><a href="dashboard.html" class="active">Applicants</a></li>
+                <li><a href="scan.html">Scan QR</a></li>
+                <li><a href="../news.html">Public News</a></li>
+                <li><a href="../media.html">Public Gallery</a></li>
+                <li style="margin-top: 2rem;"><a href="../index.html" style="color: #666;">← Back to Home</a></li>
+            </ul>
+        </sidebar>
+        <div class="content">
+            <header style="position: static; padding: 0; background: none; margin-bottom: 3rem;">
+                <h1>Manage Applicants</h1>
+                <div class="stats" style="display: flex; gap: 2rem; margin-top: 2rem;">
+                    <div class="glass-panel" style="padding: 1.5rem;">
+                        <span id="totalApplicants"
+                            style="font-size: 2rem; font-weight: 800; color: var(--primary);">0</span>
+                        <p style="font-size: 0.8rem; color: #666;">Total Applications</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="glass-panel" style="overflow-x: auto;">
+                <table id="applicantTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Country</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicantList">
+                        <!-- Rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Modal (Simplified UI) -->
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

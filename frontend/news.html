@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Press | ASMIS 2026</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        .news-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .news-item {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .news-date {
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .news-item h2 {
+            font-size: 1.8rem;
+        }
+
+        .news-item p {
+            color: #888;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Tribal Divider Top -->
+        <div
+            style="height: 4px; background: repeating-linear-gradient(90deg, var(--primary) 0px, var(--primary) 40px, #000 40px, #000 80px); opacity: 0.6;">
+        </div>
+        <div class="header-main"
+            style="display: flex; align-items: center; justify-content: space-between; padding: 4px 40px;">
+            <!-- Logo Left -->
+            <a href="index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="./assets/asmis_logo_official.png" alt="ASMIS Logo"
+                    style="height: 60px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));">
+            </a>
+            <div class="nav-group"
+                style="gap: 18px; font-size: 0.85rem; justify-content: flex-end; align-items: center;">
+                <a href="index.html">HOME</a>
+                <span style="color: #666;">|</span>
+                <a href="#">ABOUT</a>
+                <span style="color: #666;">|</span>
+                <a href="media.html">GALLERY</a>
+                <span style="color: #666;">|</span>
+                <a href="news.html" style="color: var(--primary);">NEWS</a>
+                <a href="register.html" class="premium-button" style="padding: 8px 18px; font-size: 0.75rem;">REGISTER /
+                    LOG IN</a>
+            </div>
+        </div>
+        <div class="header-bottom-border"></div>
+    </header>
+
+    <main style="padding: 120px 10%;">
+        <h1 class="animate-fade-in" style="font-size: 3.5rem; text-align: center; margin-bottom: 1rem;">Summit <span
+                style="color: var(--primary);">News</span></h1>
+        <p class="animate-fade-in" style="text-align: center; color: #888; margin-bottom: 4rem;">Latest announcements,
+            press releases, and stories from the ASMIS community.</p>
+
+        <!-- Tribal Accent Line -->
+        <div
+            style="width: 150px; height: 3px; background: var(--primary); margin: -2rem auto 4rem; position: relative;">
+            <div
+                style="position: absolute; width: 10px; height: 10px; background: var(--primary); transform: rotate(45deg); top: -4px; left: 50%; margin-left: -5px;">
+            </div>
+        </div>
+
+        <div class="news-grid animate-fade-in"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem;">
+            <!-- News Item 1 -->
+            <article class="news-card">
+                <div class="news-img">🚀</div>
+                <div class="news-content">
+                    <span class="news-date">March 05, 2026</span>
+                    <h3>ASMIS 2026 Registration is Now Officially Open!</h3>
+                    <p>Be part of the continent's largest digital gathering. We are expecting a record turnout of over
+                        5,000 influencers and media experts from 45 African nations. Early bird applications are
+                        processed within 48 hours.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 2 -->
+            <article class="news-card">
+                <div class="news-img">🎤</div>
+                <div class="news-content">
+                    <span class="news-date">February 28, 2026</span>
+                    <h3>First Round of Keynote Speakers Announced</h3>
+                    <p>We're thrilled to unveil the first lineup of visionaries who will be gracing the main stage. This
+                        year's speakers include pioneers in AI, digital ethics, and sustainable content monetization
+                        across the Sahel and beyond.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 3 -->
+            <article class="news-card">
+                <div class="news-img">🤝</div>
+                <div class="news-content">
+                    <span class="news-date">February 15, 2026</span>
+                    <h3>Strategic Partnership: Google Joins as AI Partner</h3>
+                    <p>We are excited to welcome Google as our Strategic AI Partner. Together, we will host exclusive
+                        workshops focusing on leveraging Generative AI for African creators to scale their impact
+                        locally and globally.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 4 -->
+            <article class="news-card">
+                <div class="news-img">📡</div>
+                <div class="news-content">
+                    <span class="news-date">February 10, 2026</span>
+                    <h3>Ethio Telecom to Provide High-Speed 5G Connectivity</h3>
+                    <p>Ensuring seamless connectivity for all attendees, Ethio Telecom has committed to deploying
+                        dedicated 5G hubs across the African Union Headquarters for the duration of the summit.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 5 -->
+            <article class="news-card">
+                <div class="news-img">🌍</div>
+                <div class="news-content">
+                    <span class="news-date">February 01, 2026</span>
+                    <h3>Pan-African Impact Report Released</h3>
+                    <p>The 2025 ASMIS Impact Report highlights how attendees have contributed to over $15M in
+                        collaborative brand deals and social advocacy campaigns across the continent in the last 12
+                        months.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 6 -->
+            <article class="news-card">
+                <div class="news-img">🏆</div>
+                <div class="news-content">
+                    <span class="news-date">January 25, 2026</span>
+                    <h3>ASMIS 2026 Awards Categories Announced</h3>
+                    <p>Nominations are now open across 15 categories, including 'Best Impactful Creator', 'Tech Educator
+                        of the Year', and 'Community Lead Advocate'. Start nominating your favorites! </p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 7 -->
+            <article class="news-card">
+                <div class="news-img">🏘️</div>
+                <div class="news-content">
+                    <span class="news-date">January 15, 2026</span>
+                    <h3>Official Hotel Partners & Travel Discounts</h3>
+                    <p>ASMIS delegates can now access exclusive rates with our hotel partners in Addis Ababa. Check our
+                        accommodations page for the list of certified hotels and shuttle schedules.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+
+            <!-- News Item 8 -->
+            <article class="news-card">
+                <div class="news-img">💡</div>
+                <div class="news-content">
+                    <span class="news-date">January 05, 2026</span>
+                    <h3>ASMIS Incubator Program for Young Creators</h3>
+                    <p>The 2026 summit will feature a dedicated mentor-matching session for content creators under 25,
+                        providing them with guidance from industry veterans.</p>
+                    <a href="#" class="read-more">Read Full Story <span>→</span></a>
+                </div>
+            </article>
+        </div>
+    </main>
+</body>
+
+</html>

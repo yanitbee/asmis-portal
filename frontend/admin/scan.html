@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accreditation Scanner | ASMIS</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .scanner-container {
+            max-width: 600px;
+            margin: 100px auto;
+            text-align: center;
+        }
+
+        #scanner-box {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border: 2px dashed var(--primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            position: absolute;
+            top: 0;
+            animation: scanMove 2s infinite linear;
+        }
+
+        @keyframes scanMove {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        #resultCard {
+            display: none;
+            margin-top: 2rem;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">ASMIS SCANNER</div>
+        <nav>
+            <a href="dashboard.html" style="color: white; text-decoration: none; margin-right: 20px;">Dashboard</a>
+            <a href="../index.html" style="color: #888; text-decoration: none;">Public Site</a>
+        </nav>
+    </header>
+
+    <div class="scanner-container animate-fade-in">
+        <h2 style="margin-bottom: 2rem;">Accreditation Scan</h2>
+        <div id="scanner-box">
+            <div class="scan-line"></div>
+            <p style="color: #444;">Camera Input Mock</p>
+        </div>
+
+        <div class="form-group">
+            <label>Manual Entry (Applicant ID / QR Data)</label>
+            <input type="text" id="manualId" placeholder="Paste QR Data here to simulate scan">
+            <button class="premium-button" style="margin-top: 1rem; width: 100%;" id="scanBtn">Verify QR</button>
+        </div>
+
+        <div id="resultCard" class="glass-panel">
+            <h3 style="color: var(--accent); margin-bottom: 1rem;" id="resStatus">Access Granted</h3>
+            <p><strong>Name:</strong> <span id="resName"></span></p>
+            <p><strong>Role:</strong> <span id="resRole"></span></p>
+            <p><strong>Country:</strong> <span id="resCountry"></span></p>
+        </div>
+    </div>
+
+    <script src="scan.js"></script>
+</body>
+
+</html>

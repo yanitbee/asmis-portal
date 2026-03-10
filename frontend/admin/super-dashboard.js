@@ -11,6 +11,7 @@ const adminCountEl = document.getElementById('adminCount');
 // VIP elements
 const vipListEl = document.getElementById('vipList');
 const vipCountEl = document.getElementById('vipCount');
+const vipCountTopEl = document.getElementById('vipCountTop');
 
 const role = localStorage.getItem("role");
 
@@ -84,12 +85,12 @@ pendingEl.innerText = pending;
 rejectedEl.innerText = rejected;
 
 listEl.innerHTML = data.map(app => `
-<tr>
-<td>${app.full_name}<br><small style="color: #666;">${app.email}</small></td>
+<tr style="cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(194, 153, 88, 0.1)'" onmouseout="this.style.background='transparent'" onclick="window.location.href='user-details.html?id=${app.id}&list=applicants'">
+<td><strong style="color: var(--primary);">${app.full_name}</strong><br><small style="color: #666;">${app.email}</small></td>
 <td>${app.role}</td>
 <td>${app.country}</td>
 <td><span class="status-badge status-${app.status}">${app.status}</span></td>
-<td>
+<td onclick="event.stopPropagation()">
 ${app.status === 'pending' || app.status === 'approved' || app.status === 'vip'
 ? `<button class="premium-button" style="padding: 6px 12px; font-size: 0.7rem;" onclick="approve('${app.id}')">Approve</button>
    <button class="reject-button" style="padding: 6px 12px; font-size: 0.7rem; margin-left: 5px;" onclick="reject('${app.id}')">Reject</button>`
@@ -101,108 +102,123 @@ ${app.status === 'pending' || app.status === 'approved' || app.status === 'vip'
 
 // Create pie chart
 const pieCtx = document.getElementById('pieChart').getContext('2d');
-new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-        labels: ['Approved', 'Pending', 'Rejected', 'VIP'],
-        datasets: [{
-            label: 'Number of Applicants',
-            data: [approved, pending, rejected, vip],
-            backgroundColor: [
-                '#f5b53c85',
-                '#FFFFFF',
-                '#e74c3c85',
-                '#9b59b685'
-            ],
-            borderColor: [
-                '#000000',
-                '#000000',
-                '#000000',
-                '#000000'
-            ],
-            borderWidth: 2
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio: 1.5,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    color: '#FFFFFF',
-                    font: {
-                        size: 11,
-                        weight: 'bold'
-                    },
-                    padding: 10
-                }
-            }
-        }
-    }
-});
-
-// Create bar chart
-const barCtx = document.getElementById('barChart').getContext('2d');
-new Chart(barCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Approved', 'Pending', 'Rejected', 'VIP'],
-        datasets: [{
-            label: 'Number of Applicants',
-            data: [approved, pending, rejected, vip],
-            backgroundColor: [
-                'rgba(46, 204, 113, 0.5)',
-                'rgba(194, 153, 88, 0.5)',
-                'rgba(231, 76, 60, 0.5)',
-                'rgba(155, 89, 182, 0.5)'
-            ],
-            borderColor: [
-                'rgba(46, 204, 113, 1)',
-                'rgba(194, 153, 88, 1)',
-                'rgba(231, 76, 60, 1)',
-                'rgba(155, 89, 182, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        aspectRatio: 1.5,
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: '#FFFFFF'
-                },
-                grid: {
-                    color: 'rgba(255, 255, 255, 0.1)'
-                }
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Approved', 'Pending', 'Rejected', 'VIP'],
+                datasets: [{
+                    label: 'Number of Users',
+                    data: [approved, pending, rejected, vipData.length],
+                    backgroundColor: [
+                        'rgba(232, 220, 196, 0.8)',   // Approved (Parchment)
+                        'rgba(141, 110, 99, 0.8)',    // Pending (Accent)
+                        'rgba(93, 64, 55, 0.8)',      // Rejected (Secondary)
+                        'rgba(194, 153, 88, 0.8)'     // VIP (Primary)
+                    ],
+                    borderColor: [
+                        '#1a1612', '#1a1612', '#1a1612', '#1a1612'
+                    ],
+                    borderWidth: 3,
+                    hoverOffset: 4
+                }]
             },
-            x: {
-                ticks: {
-                    color: '#FFFFFF'
-                },
-                grid: {
-                    color: 'rgba(255, 255, 255, 0.1)'
-                }
-            }
-        },
-        plugins: {
-            legend: {
-                labels: {
-                    color: '#FFFFFF',
-                    font: {
-                        size: 11,
-                        weight: 'bold'
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#ccc',
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 12,
+                                weight: '600'
+                            },
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 22, 18, 0.9)',
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        borderColor: 'rgba(194, 153, 88, 0.3)',
+                        borderWidth: 1,
+                        padding: 10
                     }
                 }
             }
-        }
-    }
-});
+        });
+
+// Create bar chart
+const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Approved', 'Pending', 'Rejected', 'VIP'],
+                datasets: [{
+                    label: 'Number of Users',
+                    data: [approved, pending, rejected, vipData.length],
+                    backgroundColor: [
+                        'rgba(232, 220, 196, 0.5)',
+                        'rgba(141, 110, 99, 0.5)',
+                        'rgba(93, 64, 55, 0.5)',
+                        'rgba(194, 153, 88, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(232, 220, 196, 1)',
+                        'rgba(141, 110, 99, 1)',
+                        'rgba(93, 64, 55, 1)',
+                        'rgba(194, 153, 88, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#888',
+                            font: { family: "'Inter', sans-serif" }
+                        },
+                        grid: {
+                            color: 'rgba(194, 153, 88, 0.05)'
+                        },
+                        border: { display: false }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#888',
+                            font: { family: "'Inter', sans-serif", weight: '600' }
+                        },
+                        grid: {
+                            display: false
+                        },
+                        border: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 22, 18, 0.9)',
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        borderColor: 'rgba(194, 153, 88, 0.3)',
+                        borderWidth: 1,
+                        padding: 10
+                    }
+                }
+            }
+        });
 
 };
 
@@ -253,8 +269,8 @@ const fetchAdmins = () => {
     adminCountEl.textContent = `(${admins.length} total)`;
 
     adminListEl.innerHTML = admins.map(admin => `
-        <tr>
-            <td>${admin.username}</td>
+        <tr style="cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(194, 153, 88, 0.1)'" onmouseout="this.style.background='transparent'" onclick="window.location.href='user-details.html?id=${admin.id}&list=admins'">
+            <td><strong style="color: var(--primary);">${admin.username}</strong></td>
             <td>${admin.role}</td>
             <td>${admin.created_date}</td>
             <td>
@@ -262,10 +278,10 @@ const fetchAdmins = () => {
                     ${admin.status}
                 </span>
             </td>
-            <td>
-                <button class="btn" onclick="deleteAdmin('${admin.id}', '${admin.username}')">
-                    <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon">
-                        <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
+            <td onclick="event.stopPropagation()">
+                <button class="btn" style="background: none; border: none; padding: 0; cursor: pointer; color: #ff6b6b;" onclick="deleteAdmin('${admin.id}', '${admin.username}')">
+                    <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor">
+                        <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z"></path>
                     </svg>
                 </button>
             </td>
@@ -356,10 +372,13 @@ const vipData = [
 const fetchVIPs = () => {
     const vips = vipData;
     vipCountEl.textContent = `(${vips.length} total)`;
+    if (vipCountTopEl) {
+        vipCountTopEl.innerText = vips.length;
+    }
 
     vipListEl.innerHTML = vips.map(vip => `
-        <tr>
-            <td>${vip.name}</td>
+        <tr style="cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(194, 153, 88, 0.1)'" onmouseout="this.style.background='transparent'" onclick="window.location.href='user-details.html?id=${vip.id}&list=vips'">
+            <td><strong style="color: var(--primary);">${vip.name}</strong></td>
             <td>${vip.email}</td>
             <td>
                 <span class="status-badge ${vip.type === 'VVIP' ? 'status-approved' : 'status-pending'}">
@@ -372,10 +391,10 @@ const fetchVIPs = () => {
                     ${vip.status}
                 </span>
             </td>
-            <td>
-                <button class="btn" onclick="deleteVIP('${vip.id}', '${vip.name}')">
-                    <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon">
-                        <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z" id="Fill"></path>
+            <td onclick="event.stopPropagation()">
+                <button class="btn" style="background: none; border: none; padding: 0; cursor: pointer; color: #ff6b6b;" onclick="deleteVIP('${vip.id}', '${vip.name}')">
+                    <svg viewBox="0 0 15 17.5" height="17.5" width="15" xmlns="http://www.w3.org/2000/svg" class="icon" fill="currentColor">
+                        <path transform="translate(-2.5 -1.25)" d="M15,18.75H5A1.251,1.251,0,0,1,3.75,17.5V5H2.5V3.75h15V5H16.25V17.5A1.251,1.251,0,0,1,15,18.75ZM5,5V17.5H15V5Zm7.5,10H11.25V7.5H12.5V15ZM8.75,15H7.5V7.5H8.75V15ZM12.5,2.5h-5V1.25h5V2.5Z"></path>
                     </svg>
                 </button>
             </td>

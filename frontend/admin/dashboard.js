@@ -314,14 +314,14 @@ pendingEl.innerText = pending;
 rejectedEl.innerText = rejected;
 
 listEl.innerHTML = data.map(app => `
-<tr>
-<td>${app.full_name}<br><small>${app.email}</small></td>
+<tr style="cursor: pointer; transition: background 0.3s;" onmouseover="this.style.background='rgba(194, 153, 88, 0.1)'" onmouseout="this.style.background='transparent'" onclick="window.location.href='user-details.html?id=${app.id}&list=applicants'">
+<td><strong style="color: var(--primary);">${app.full_name}</strong><br><small>${app.email}</small></td>
 <td>${app.role}</td>
 <td>${app.country}</td>
 <td><span class="status-badge status-${app.status}">${app.status}</span></td>
-<td>
-<button onclick="approve('${app.id}')">Approve</button>
-<button onclick="reject('${app.id}')">Reject</button>
+<td onclick="event.stopPropagation()">
+<button class="premium-button" style="padding: 4px 8px; font-size: 0.7rem;" onclick="approve('${app.id}')">Approve</button>
+<button class="reject-button" style="padding: 4px 8px; font-size: 0.7rem; margin-left: 5px;" onclick="reject('${app.id}')">Reject</button>
 </td>
 </tr>
 `).join('');
@@ -342,18 +342,17 @@ listEl.innerHTML = data.map(app => `
                     label: 'Number of Applicants',
                     data: pieData,
                     backgroundColor: [
-                        '#f5b53c85',
-                        '#FFFFFF',
-                        '#e74c3c85',
-                        ...(role === 'super_admin' ? ['#9b59b685'] : [])
+                        'rgba(232, 220, 196, 0.8)',   // Approved (Parchment)
+                        'rgba(141, 110, 99, 0.8)',    // Pending (Accent)
+                        'rgba(93, 64, 55, 0.8)',      // Rejected (Secondary)
+                        ...(role === 'super_admin' ? ['rgba(194, 153, 88, 0.8)'] : []) // VIP
                     ],
                     borderColor: [
-                        '#000000',
-                        '#000000',
-                        '#000000',
-                        ...(role === 'super_admin' ? ['#000000'] : [])
+                        '#1a1612', '#1a1612', '#1a1612',
+                        ...(role === 'super_admin' ? ['#1a1612'] : [])
                     ],
-                    borderWidth: 2
+                    borderWidth: 3,
+                    hoverOffset: 4
                 }]
             },
             options: {
@@ -364,13 +363,23 @@ listEl.innerHTML = data.map(app => `
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#FFFFFF',
+                            color: '#ccc',
                             font: {
-                                size: 11,
-                                weight: 'bold'
+                                family: "'Inter', sans-serif",
+                                size: 12,
+                                weight: '600'
                             },
-                            padding: 10
+                            padding: 20,
+                            usePointStyle: true
                         }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 22, 18, 0.9)',
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        borderColor: 'rgba(194, 153, 88, 0.3)',
+                        borderWidth: 1,
+                        padding: 10
                     }
                 }
             }
@@ -381,20 +390,20 @@ listEl.innerHTML = data.map(app => `
         const barLabels = ['Approved', 'Pending', 'Rejected'];
         const barData = [approved, pending, rejected];
         const barColors = [
-            '#2ecc7180',
-            'rgba(194, 153, 88, 0.5)',
-            'rgba(231, 76, 60, 0.5)'
+            'rgba(232, 220, 196, 0.5)',
+            'rgba(141, 110, 99, 0.5)',
+            'rgba(93, 64, 55, 0.5)'
         ];
         const barBorderColors = [
-            'rgba(46, 204, 113, 1)',
-            'rgba(194, 153, 88, 1)',
-            'rgba(231, 76, 60, 1)'
+            'rgba(232, 220, 196, 1)',
+            'rgba(141, 110, 99, 1)',
+            'rgba(93, 64, 55, 1)'
         ];
         if (role === 'super_admin') {
             barLabels.push('VIP');
             barData.push(vip);
-            barColors.push('rgba(155, 89, 182, 0.5)');
-            barBorderColors.push('rgba(155, 89, 182, 1)');
+            barColors.push('rgba(194, 153, 88, 0.5)');
+            barBorderColors.push('rgba(194, 153, 88, 1)');
         }
         new Chart(barCtx, {
             type: 'bar',
@@ -405,7 +414,8 @@ listEl.innerHTML = data.map(app => `
                     data: barData,
                     backgroundColor: barColors,
                     borderColor: barBorderColors,
-                    borderWidth: 1
+                    borderWidth: 2,
+                    borderRadius: 4,
                 }]
             },
             options: {
@@ -416,30 +426,36 @@ listEl.innerHTML = data.map(app => `
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            color: '#FFFFFF'
+                            color: '#888',
+                            font: { family: "'Inter', sans-serif" }
                         },
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                            color: 'rgba(194, 153, 88, 0.05)'
+                        },
+                        border: { display: false }
                     },
                     x: {
                         ticks: {
-                            color: '#FFFFFF'
+                            color: '#888',
+                            font: { family: "'Inter', sans-serif", weight: '600' }
                         },
                         grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
+                            display: false
+                        },
+                        border: { display: false }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: {
-                            color: '#FFFFFF',
-                            font: {
-                                size: 11,
-                                weight: 'bold'
-                            }
-                        }
+                        display: false // Hide legend for bar chart since coloring is obvious
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 22, 18, 0.9)',
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 12 },
+                        borderColor: 'rgba(194, 153, 88, 0.3)',
+                        borderWidth: 1,
+                        padding: 10
                     }
                 }
             }

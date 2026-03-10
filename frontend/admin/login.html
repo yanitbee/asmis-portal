@@ -5,68 +5,268 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | ASMIS</title>
     <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        .login-container {
-            max-width: 400px;
-            margin: 5rem auto;
-            padding: 2rem;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
+        body {
+            background: linear-gradient(180deg, #0d0a08 0%, #1a1410 30%, #120e0c 60%, #0a0806 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            position: relative;
         }
+
+        /* African border top decoration */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background:
+                repeating-linear-gradient(90deg,
+                    transparent 0px,
+                    transparent 10px,
+                    rgba(194, 153, 88, 0.3) 10px,
+                    rgba(194, 153, 88, 0.3) 12px,
+                    transparent 12px,
+                    transparent 20px,
+                    rgba(194, 153, 88, 0.15) 20px,
+                    rgba(194, 153, 88, 0.15) 25px,
+                    transparent 25px,
+                    transparent 30px);
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 120px);
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-container {
+            background:
+                repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(194, 153, 88, 0.01) 30px, rgba(194, 153, 88, 0.01) 32px),
+                linear-gradient(180deg, #1e1914, #1a1612);
+            border: 1px solid rgba(194, 153, 88, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            border-bottom: 4px solid var(--primary);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
         .login-container h2 {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 0.5rem;
             color: var(--primary);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
         }
+
+        .login-container .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #fff;
+            margin-bottom: 6px;
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
         }
         .form-group input {
             width: 100%;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 5px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(194, 153, 88, 0.15);
+            border-radius: 8px;
             color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
         }
+        .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(194, 153, 88, 0.1);
+        }
+
+        /* 3D Submit Button */
         .btn {
             width: 100%;
-            padding: 0.75rem;
-            background: var(--primary);
+            padding: 16px;
+            background: linear-gradient(180deg, #d4a95a 0%, #c29958 40%, #a07840 100%);
+            color: #120e0c;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             border: none;
-            border-radius: 5px;
-            color: #000;
-            font-weight: 700;
+            border-radius: 8px;
             cursor: pointer;
+            margin-top: 1rem;
+            box-shadow:
+                0 4px 0 #7a5c2e,
+                0 6px 10px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            transition: all 0.15s ease;
         }
+
+        .btn:hover {
+            background: linear-gradient(180deg, #e0b868 0%, #d4a95a 40%, #b08a48 100%);
+            box-shadow:
+                0 6px 0 #7a5c2e,
+                0 8px 14px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            box-shadow:
+                0 1px 0 #7a5c2e,
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            transform: translateY(3px);
+        }
+
         .error {
             color: #ff6b6b;
             text-align: center;
             margin-top: 1rem;
+            font-size: 0.9rem;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        /* African decorative dots */
+        .african-deco {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .african-deco span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.4;
+        }
+
+        .african-deco span:nth-child(2) {
+            width: 12px;
+            height: 12px;
+            opacity: 0.6;
+        }
+
+        .african-deco span:nth-child(3) {
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+            border: 2px solid var(--primary);
+            background: transparent;
+        }
+
+        .african-deco span:nth-child(4) {
+            width: 12px;
+            height: 12px;
+            opacity: 0.6;
+        }
+
+        .african-deco span:nth-child(5) {
+            width: 8px;
+            height: 8px;
+            opacity: 0.4;
+        }
+
+        /* Navbar overrides */
+        .nav-group a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-group a:hover {
+            color: var(--primary);
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Admin Login</h2>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" required>
+    <header style="position: relative; z-index: 10; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+        <!-- Tribal Divider Top -->
+        <div
+            style="height: 4px; background: repeating-linear-gradient(90deg, var(--primary) 0px, var(--primary) 40px, #000 40px, #000 80px); opacity: 0.6;">
+        </div>
+        <div class="header-main"
+            style="display: flex; align-items: center; justify-content: space-between; padding: 4px 40px;">
+
+            <!-- Logo Left -->
+            <a href="../index.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="../assets/asmis_logo_official.png" alt="ASMIS Logo"
+                    style="height: 60px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));">
+            </a>
+
+            <!-- Right Nav -->
+            <div class="nav-group"
+                style="gap: 18px; font-size: 0.85rem; justify-content: flex-end; align-items: center; display: flex;">
+                <a href="../index.html">HOME</a>
+                <span style="color: #666;">|</span>
+                <a href="#">ABOUT</a>
+                <span style="color: #666;">|</span>
+                <a href="../media.html">GALLERY</a>
+                <span style="color: #666;">|</span>
+                <a href="../news.html">NEWS</a>
+                <a href="../register.html"
+                    style="padding: 8px 18px; font-size: 0.75rem; border-radius: 5px; background: linear-gradient(135deg, var(--primary), #8a6b3a); color: #120e0c; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 3px 0 #7a5c2e, 0 4px 8px rgba(0,0,0,0.3); transition: all 0.15s; margin-left: 10px;">REGISTER
+                    / LOG IN</a>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
+        </div>
+        <div class="header-bottom-border" style="height: 1px; background: rgba(194, 153, 88, 0.2);"></div>
+    </header>
+
+    <div class="login-wrapper">
+        <div class="login-container">
+            <h2>Admin Login</h2>
+            <p class="subtitle">Enter your credentials to access the dashboard</p>
+            
+            
+            <div class="african-deco">
+                <span></span><span></span><span></span><span></span><span></span>
             </div>
-            <button type="submit" class="btn">Login</button>
-        </form>
-        <div id="error" class="error" style="display: none;"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div id="error" class="error" style="display: none;"></div>
+        </div>
     </div>
 
     <script>

@@ -632,6 +632,7 @@ const vipData = [
     }
 ];
 
+
 const fetchVIPs = () => {
     const vipListEl = document.getElementById('vipList');
     const vipCountEl = document.getElementById('vipCount');

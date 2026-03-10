@@ -7,15 +7,19 @@ const secretKey = process.env.JWT_SECRET;
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
-  // Simulated user database
-  const user = { id: 1, username, password: await bcrypt.hash(password, 10) };
-
-  if (user.username === process.env.ADMIN_EMAIL && await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({ id: user.id, role: 'admin' }, secretKey);
-    res.json({ message: 'Logged in', token });
-  } else {
-    res.status(401).json({ message: 'Invalid username or password' });
+  // Hardcoded users for demo
+  const users = {
+      admin: { password: '1234', role: 'admin' },
+      superadmin: { password: '12345', role: 'super_admin' }
+  };
+  
+  const user = users[username];
+  if (!user || password !== user.password) {
+      return res.status(401).json({ error: 'Invalid username or password' });
   }
+
+  const token = jwt.sign({ id: username, username, role: user.role }, secretKey || 'your-secret-key', { expiresIn: '1h' });
+  res.json({ message: 'Logged in', token, role: user.role });
 };
 export const registerApplicant = async (req, res) => {
   const { username, password, role, country } = req.body;

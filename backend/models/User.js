@@ -19,7 +19,7 @@ const applicantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // Add any other fields you need for the applicant
+
 });
 
 const User = mongoose.model('User', applicantSchema);

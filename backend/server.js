@@ -21,15 +21,7 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-app.use(cors());
 app.use(express.json());
-app.use('/api', authRoutes);
-app.use('/api', adminRoutes);
-
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}`);
-});
 
 // Register applicant routes
 app.post('/api/applicants', authMiddleware, authController.registerApplicant);
@@ -37,14 +29,10 @@ app.post('/api/applicants', authMiddleware, authController.registerApplicant);
 // Dashboard routes
 app.get('/api/dashboard', authMiddleware, adminController.getDashboard);
 
-// Other routes
+// API routes
 app.use('/api', authRoutes);
 app.use('/api', adminRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server listening on port ${process.env.PORT}`);
-});
-// No DB initialization for demo
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
@@ -86,21 +74,6 @@ app.post('/api/register', async (req, res) => {
     res.status(201).json({ id: 'demo-id', role, full_name, email, country, organization, social_handle });
 });
 
-// Login for Admin/Super Admin
-app.post('/api/login', async (req, res) => {
-    const { username, password } = req.body;
-    // Hardcoded users for demo
-    const users = {
-        admin: { password: 'admin123', role: 'admin' },
-        superadmin: { password: 'super123', role: 'super_admin' }
-    };
-    const user = users[username];
-    if (!user || password !== user.password) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    const token = jwt.sign({ id: username, username, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, role: user.role });
-});
 
 // --- Admin Routes ---
 

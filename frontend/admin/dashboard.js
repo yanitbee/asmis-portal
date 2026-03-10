@@ -15,6 +15,7 @@ if (!token) {
     window.location.href = 'login.html';
 }
 
+
 const setupDashboardByRole = () => {
 
     if (role === "admin") {
@@ -380,7 +381,7 @@ listEl.innerHTML = data.map(app => `
         const barLabels = ['Approved', 'Pending', 'Rejected'];
         const barData = [approved, pending, rejected];
         const barColors = [
-            'rgba(46, 204, 113, 0.5)',
+            '#2ecc7180',
             'rgba(194, 153, 88, 0.5)',
             'rgba(231, 76, 60, 0.5)'
         ];

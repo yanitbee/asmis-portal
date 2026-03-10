@@ -5,17 +5,45 @@ import { v4 as uuidv4 } from 'uuid';
 import QRCode from 'qrcode';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import bodyParser from 'body-parser';
+import authRoutes from './routes/authRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import authController from './controllers/authController.js';
+import adminController from './controllers/adminController.js';
+import authMiddleware from './middleware/authMiddleware.js';
+import roleMiddleware from './middleware/roleMiddleware.js';
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 app.use(cors());
 app.use(express.json());
+app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
 
 
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
+});
+
+// Register applicant routes
+app.post('/api/applicants', authMiddleware, authController.registerApplicant);
+
+// Dashboard routes
+app.get('/api/dashboard', authMiddleware, adminController.getDashboard);
+
+// Other routes
+app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
+
+app.listen(process.env.PORT, () => {
+  console.log(`Server listening on port ${process.env.PORT}`);
+});
 // No DB initialization for demo
 
 // Middleware to verify JWT token

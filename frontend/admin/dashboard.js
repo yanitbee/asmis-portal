@@ -100,7 +100,7 @@ if (role === "super_admin") {
 // Apply initial role-based UI
 applyRoleBasedUI();
 
-const fetchApplicants = async () => {
+/*const fetchApplicants = async () => {
     if (!listEl) {
         console.error('applicantList element not found');
         return;
@@ -269,8 +269,181 @@ const fetchApplicants = async () => {
 
     // Apply role-based UI after data is loaded
     applyRoleBasedUI();
-};
+}; 
+*/
+const fetchApplicants = () => {
 
+const data = [
+{
+id:"1",
+full_name:"John Doe",
+email:"john@example.com",
+role:"Influencer",
+country:"Ethiopia",
+status:"pending"
+},
+{
+id:"2",
+full_name:"Sara Ali",
+email:"sara@example.com",
+role:"Speaker",
+country:"Kenya",
+status:"approved"
+},
+{
+id:"3",
+full_name:"Michael Chen",
+email:"michael@example.com",
+role:"Media",
+country:"China",
+status:"rejected"
+}
+
+
+];
+
+totalEl.innerText = data.length;
+
+const approved = data.filter(app => app.status === 'approved').length;
+const pending = data.filter(app => app.status === 'pending').length;
+const rejected = data.filter(app => app.status === 'rejected').length;
+
+approvedEl.innerText = approved;
+pendingEl.innerText = pending;
+rejectedEl.innerText = rejected;
+
+listEl.innerHTML = data.map(app => `
+<tr>
+<td>${app.full_name}<br><small>${app.email}</small></td>
+<td>${app.role}</td>
+<td>${app.country}</td>
+<td><span class="status-badge status-${app.status}">${app.status}</span></td>
+<td>
+<button onclick="approve('${app.id}')">Approve</button>
+<button onclick="reject('${app.id}')">Reject</button>
+</td>
+</tr>
+`).join('');
+
+ // Create pie chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const pieLabels = ['Approved', 'Pending', 'Rejected'];
+        const pieData = [approved, pending, rejected];
+        if (role === 'super_admin') {
+            pieLabels.push('VIP');
+            pieData.push(vip);
+        }
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: pieLabels,
+                datasets: [{
+                    label: 'Number of Applicants',
+                    data: pieData,
+                    backgroundColor: [
+                        '#f5b53c85',
+                        '#FFFFFF',
+                        '#e74c3c85',
+                        ...(role === 'super_admin' ? ['#9b59b685'] : [])
+                    ],
+                    borderColor: [
+                        '#000000',
+                        '#000000',
+                        '#000000',
+                        ...(role === 'super_admin' ? ['#000000'] : [])
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            },
+                            padding: 10
+                        }
+                    }
+                }
+            }
+        });
+
+        // Create bar chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barLabels = ['Approved', 'Pending', 'Rejected'];
+        const barData = [approved, pending, rejected];
+        const barColors = [
+            'rgba(46, 204, 113, 0.5)',
+            'rgba(194, 153, 88, 0.5)',
+            'rgba(231, 76, 60, 0.5)'
+        ];
+        const barBorderColors = [
+            'rgba(46, 204, 113, 1)',
+            'rgba(194, 153, 88, 1)',
+            'rgba(231, 76, 60, 1)'
+        ];
+        if (role === 'super_admin') {
+            barLabels.push('VIP');
+            barData.push(vip);
+            barColors.push('rgba(155, 89, 182, 0.5)');
+            barBorderColors.push('rgba(155, 89, 182, 1)');
+        }
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                    label: 'Number of Applicants',
+                    data: barData,
+                    backgroundColor: barColors,
+                    borderColor: barBorderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 1.5,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#FFFFFF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#FFFFFF',
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+};
 window.approve = async (id) => {
     try {
         const response = await fetch(`${API_BASE}/admin/approve/${id}`, {

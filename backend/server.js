@@ -15,6 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 app.use(cors());
 app.use(express.json());
 
+
 // No DB initialization for demo
 
 // Middleware to verify JWT token
@@ -45,6 +46,7 @@ const requireSuperAdmin = (req, res, next) => {
     }
     next();
 };
+
 
 // --- Public Routes ---
 

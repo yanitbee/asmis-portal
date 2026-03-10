@@ -70,7 +70,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:5000/api';
+        /*const API_BASE = 'http://localhost:5000/api';
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -97,7 +97,29 @@
                 document.getElementById('error').textContent = 'Login failed';
                 document.getElementById('error').style.display = 'block';
             }
-        });
+        }); */
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Demo accounts
+    if (username === "superadmin" && password === "1234") {
+        localStorage.setItem("role", "superadmin");
+        window.location.href = "super-dashboard.html";
+    }
+
+    else if (username === "admin" && password === "1234") {
+        localStorage.setItem("role", "admin");
+        window.location.href = "dashboard.html";
+    }
+
+    else {
+        document.getElementById('error').textContent = "Invalid login";
+        document.getElementById('error').style.display = "block";
+    }
+});
     </script>
 </body>
 </html>

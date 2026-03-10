@@ -1,4 +1,4 @@
-/*const listEl = document.getElementById('applicantList');
+const listEl = document.getElementById('applicantList');
 const totalEl = document.getElementById('totalApplicants');
 const approvedEl = document.getElementById('approvedCount');
 const pendingEl = document.getElementById('pendingCount');
@@ -12,6 +12,12 @@ const adminCountEl = document.getElementById('adminCount');
 const vipListEl = document.getElementById('vipList');
 const vipCountEl = document.getElementById('vipCount');
 
+const role = localStorage.getItem("role");
+
+if(role !== "superadmin"){
+    alert("Access denied");
+    window.location.href = "login.html";
+}
 const fetchApplicants = () => {
 
 const data = [

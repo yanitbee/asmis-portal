@@ -159,10 +159,10 @@ const pieCtx = document.getElementById('pieChart').getContext('2d');
                     label: 'Number of Users',
                     data: [approved, pending, rejected, vipData.length],
                     backgroundColor: [
-                        'rgba(232, 220, 196, 0.8)',   // Approved (Parchment)
-                        'rgba(141, 110, 99, 0.8)',    // Pending (Accent)
-                        'rgba(93, 64, 55, 0.8)',      // Rejected (Secondary)
-                        'rgba(194, 153, 88, 0.8)'     // VIP (Primary)
+                        'rgba(232, 220, 196, 0.8)',   // Approved
+                        'rgba(141, 110, 99, 0.8)',    // Pending
+                        'rgba(93, 64, 55, 0.8)',      // Rejected
+                        'rgba(194, 153, 88, 0.8)'     // VIP
                     ],
                     borderColor: [
                         '#1a1612', '#1a1612', '#1a1612', '#1a1612'

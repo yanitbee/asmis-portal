@@ -13,12 +13,61 @@ const vipListEl = document.getElementById('vipList');
 const vipCountEl = document.getElementById('vipCount');
 const vipCountTopEl = document.getElementById('vipCountTop');
 
-const role = localStorage.getItem("role");
+// Check if logged in and role
+const checkAuth = () => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    
+    if (!token) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    
+    if (role !== "super_admin") {
+        alert("Access denied");
+        window.location.href = "login.html";
+        return false;
+    }
+    return true;
+};
 
-if(role !== "super_admin"){
-    alert("Access denied");
-    window.location.href = "login.html";
+// Immediate check
+if (!checkAuth()) {
+    throw new Error("Unauthorized");
 }
+
+// Prevent browser caching/back-button access
+window.addEventListener("pageshow", function (event) {
+    if (!localStorage.getItem("token") || localStorage.getItem("role") !== "super_admin") {
+        window.location.href = "login.html";
+    }
+});
+
+// Secure logout confirmation workflow
+window.logout = () => {
+    const modal = document.getElementById('logoutModal');
+    if (modal) modal.classList.add('active');
+};
+
+window.closeLogoutModal = () => {
+    const modal = document.getElementById('logoutModal');
+    if (modal) modal.classList.remove('active');
+};
+
+window.confirmLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    window.location.href = 'login.html';
+};
+
+// Handle Sidebar Logout Click
+document.addEventListener('click', (e) => {
+    const logoutBtn = e.target.closest('#logoutBtn');
+    if (logoutBtn) {
+        e.preventDefault();
+        window.logout();
+    }
+});
 const fetchApplicants = () => {
 
 const data = [

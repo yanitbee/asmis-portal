@@ -15,16 +15,36 @@ if (!token) {
     window.location.href = 'login.html';
 }
 
+// Helper to decode JWT payload safely
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+}
+
+const tokenData = parseJwt(token);
+// Prioritize role from token, fallback to localStorage
+const userRole = (tokenData && tokenData.role) ? tokenData.role : loggedRole;
+
 const params = getQueryParams();
 
 // Setting Correct Back Link
 const backBtn = document.getElementById('backBtn');
-if (loggedRole === 'super_admin') {
+const dashLink = document.getElementById('dashLink');
+
+if (userRole === 'super_admin') {
     backBtn.href = 'super-dashboard.html';
-    document.getElementById('dashLink').href = 'super-dashboard.html';
+    if (dashLink) dashLink.href = 'super-dashboard.html';
 } else {
     backBtn.href = 'dashboard.html';
-    document.getElementById('dashLink').href = 'dashboard.html';
+    if (dashLink) dashLink.href = 'dashboard.html';
 }
 
 // Mock Data representing the ones in the dashboards since the API isn't fully integrated here for individual users yet

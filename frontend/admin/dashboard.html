@@ -131,16 +131,6 @@
             padding-top: 1.5rem;
         }
 
-        aside .logout-link {
-            color: #666;
-        }
-
-        aside .logout-link:hover {
-            color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.05);
-            border-color: rgba(255, 107, 107, 0.1);
-        }
-
         .content {
             padding: 3rem 5%;
             position: relative;
@@ -373,6 +363,118 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transform: translateY(-1px);
         }
+
+        /* Logout */
+        .logout-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .logout-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .logout-modal-content {
+            background:
+                repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(194, 153, 88, 0.01) 30px, rgba(194, 153, 88, 0.01) 32px),
+                linear-gradient(180deg, #1e1914, #1a1612);
+            border: 1px solid rgba(194, 153, 88, 0.25);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            border-bottom: 4px solid var(--primary);
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logout-modal-overlay.active .logout-modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .logout-modal-content h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logout-modal-content p {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .logout-modal-buttons {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            border: none;
+        }
+
+        .btn-cancel {
+            background: linear-gradient(180deg, #2a231c 0%, #1a1410 100%);
+            color: var(--primary);
+            border: 1px solid rgba(194, 153, 88, 0.25);
+            box-shadow:
+                0 3px 0 #0a0806,
+                0 5px 8px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(194, 153, 88, 0.1);
+        }
+
+        .btn-cancel:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 5px 0 #0a0806,
+                0 7px 12px rgba(0, 0, 0, 0.5);
+            border-color: var(--primary);
+        }
+
+        .btn-confirm {
+            background: linear-gradient(180deg, #d4a95a 0%, #c29958 40%, #a07840 100%);
+            color: #120e0c;
+            box-shadow:
+                0 4px 0 #7a5c2e,
+                0 6px 10px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-confirm:hover {
+            background: linear-gradient(180deg, #e0b868 0%, #d4a95a 40%, #b08a48 100%);
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 #7a5c2e,
+                0 8px 14px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
     </style>
 </head>
 
@@ -406,9 +508,9 @@
                     </a>
                 </li>
                 <li class="logout-item">
-                    <a href="../index.html" class="logout-link">
-                        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                        Back to Home
+                    <a href="javascript:void(0)" id="logoutBtn">
+                        <svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+                        Logout
                     </a>
                 </li>
             </ul>
@@ -552,6 +654,18 @@
                 </select>
             </div>
             <button class="submit-btn" onclick="registerVIP()">Register</button>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="logout-modal-overlay">
+        <div class="logout-modal-content">
+            <h2>Confirm Logout</h2>
+            <p>Are you sure you want to log out ?</p>
+            <div class="logout-modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeLogoutModal()">Cancel</button>
+                <button class="modal-btn btn-confirm" onclick="confirmLogout()">Yes, Logout</button>
+            </div>
         </div>
     </div>
 

@@ -12,6 +12,7 @@ import authController from './controllers/authController.js';
 import adminController from './controllers/adminController.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import roleMiddleware from './middleware/roleMiddleware.js';
+import noCacheMiddleware from './middleware/noCacheMiddleware.js';
 
 import { initDb } from './db.js';
 
@@ -41,8 +42,8 @@ app.use((req, res, next) => {
 });
 
 // API routes
-app.use('/api', authRoutes);
-app.use('/api', adminRoutes);
+app.use('/api', noCacheMiddleware, authRoutes);
+app.use('/api', noCacheMiddleware, adminRoutes);
 
 // Test route
 app.get('/test', (req, res) => {

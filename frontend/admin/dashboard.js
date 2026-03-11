@@ -9,11 +9,56 @@ const vipStatsEl = document.getElementById('vipStats');
 const API_BASE = 'http://localhost:5015/api';
 
 // Check if logged in and role
+const checkAuth = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    return true;
+};
+
+// Immediate check
+if (!checkAuth()) {
+    // Stop execution if not authenticated
+    throw new Error("Unauthorized");
+}
+
 const token = localStorage.getItem('token');
 const role = localStorage.getItem('role');
-if (!token) {
+
+// Prevent browser caching/back-button access
+window.addEventListener("pageshow", function (event) {
+    if (!localStorage.getItem("token")) {
+        window.location.href = "login.html";
+    }
+});
+
+// Secure logout confirmation workflow
+window.logout = () => {
+    const modal = document.getElementById('logoutModal');
+    if (modal) modal.classList.add('active');
+};
+
+window.closeLogoutModal = () => {
+    const modal = document.getElementById('logoutModal');
+    if (modal) modal.classList.remove('active');
+};
+
+window.confirmLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     window.location.href = 'login.html';
-}
+};
+
+// Handle Sidebar Logout Click
+document.addEventListener('click', (e) => {
+    const logoutBtn = e.target.closest('#logoutBtn');
+    if (logoutBtn) {
+        e.preventDefault();
+        window.logout();
+    }
+});
 
 
 const setupDashboardByRole = () => {
@@ -56,14 +101,18 @@ const applyRoleBasedUI = () => {
       const menu = document.querySelector("aside ul");
 
 if (role === "admin") {
-
     menu.innerHTML = `
         <li><a href="dashboard.html" class="active">Applicants</a></li>
         <li><a href="scan.html">Scan QR</a></li>
         <li><a href="../news.html">Public News</a></li>
         <li><a href="../media.html">Public Gallery</a></li>
+        <li class="logout-item">
+            <a href="javascript:void(0)" id="logoutBtn">
+                <svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+                Logout
+            </a>
+        </li>
     `;
-
 }
 
 if (role === "super_admin") {
@@ -76,8 +125,13 @@ if (role === "super_admin") {
         <li><a href="scan.html">Scan QR</a></li>
         <li><a href="../news.html">Public News</a></li>
         <li><a href="../media.html">Public Gallery</a></li>
+        <li class="logout-item">
+            <a href="javascript:void(0)" id="logoutBtn">
+                <svg viewBox="0 0 24 24"><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>
+                Logout
+            </a>
+        </li>
     `;
-
 }
         // Show super admin sections
         document.getElementById('adminSection').style.display = 'block';

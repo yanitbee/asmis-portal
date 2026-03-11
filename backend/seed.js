@@ -2,6 +2,7 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import { initDb } from './db.js';
 
 dotenv.config();
 
@@ -18,14 +19,17 @@ const roles = ['Influencer', 'Media', 'Sponsor', 'Public'];
 async function seed() {
     console.log('Starting seeder...');
     try {
-        await pool.query('DELETE FROM applicants'); // Clear existing dummy data (optional but good for clean slates)
-        console.log('Existing applicants cleared.');
+        await initDb();
+        console.log('Database initialized.');
+        
+        await pool.query('TRUNCATE TABLE applicants, users CASCADE');
+        console.log('Tables cleared.');
 
         // Seed admin users
         const adminPassword = await bcrypt.hash('admin123', 10);
         const superAdminPassword = await bcrypt.hash('super123', 10);
 
-        await pool.query('DELETE FROM users'); // Clear existing users
+        // Seed admin users
         await pool.query(
             'INSERT INTO users (username, password_hash, role) VALUES ($1, $2, $3)',
             ['admin', adminPassword, 'admin']

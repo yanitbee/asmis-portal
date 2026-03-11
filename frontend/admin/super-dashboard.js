@@ -15,7 +15,7 @@ const vipCountTopEl = document.getElementById('vipCountTop');
 
 const role = localStorage.getItem("role");
 
-if(role !== "superadmin"){
+if(role !== "super_admin"){
     alert("Access denied");
     window.location.href = "login.html";
 }

@@ -113,7 +113,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/stats/countries');
+                const response = await fetch('http://localhost:5015/api/stats/countries');
                 const data = await response.json(); // Now an object like { "Ethiopia": { total: 10, Influencer: 5... } }
 
                 const tbody = document.querySelector('#statsTable tbody');

@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let countryStats = {};
 
     try {
-        const response = await fetch('http://localhost:5000/api/stats/countries');
+        const response = await fetch('http://localhost:5015/api/stats/countries');
         if (response.ok) {
             countryStats = await response.json();
         } else {

@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+dotenv.config();
 
 /**
  * Verify JWT token in request headers
@@ -10,40 +9,22 @@ require("dotenv").config();
  * @param {Object} res - Response object
  * @param {Function} next - Next middleware function
  */
-const verifyToken = (req,res,next)=>{
-
-    /*
-    * Check if Authorization header is present
-    */
-    const authHeader = req.headers.authorization;
-    if(!authHeader){
-        return res.status(401).json({message:"Access denied"});
+export const verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) {
+        return res.status(401).json({ message: "Access denied" });
     }
 
-    /*
-    * Extract token from Authorization header
-    */
     const token = authHeader.split(" ")[1];
 
-    try{
-        /*
-        * Verify token using JWT secret
-        */
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
         req.user = decoded;
-
         next();
-
-    }catch(err){
-        /*
-        * Return 403 if token is invalid
-        */
-        return res.status(403).json({message:"Invalid token"});
-
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid token" });
     }
-
 };
 
-
-module.exports = verifyToken;
+export default verifyToken;
 

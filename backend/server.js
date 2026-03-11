@@ -13,9 +13,20 @@ import adminController from './controllers/adminController.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import roleMiddleware from './middleware/roleMiddleware.js';
 
+import { initDb } from './db.js';
+
 dotenv.config();
 
+console.log('Server process starting...');
+
+// Initialize database tables
+initDb();
+
 const app = express();
+app.use((req, res, next) => {
+    console.log(`[EARLY DEBUG] ${req.method} ${req.url}`);
+    next();
+});
 app.use(cors());
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 5000;
@@ -23,45 +34,33 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 app.use(express.json());
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
+// API routes
+app.use('/api', authRoutes);
+app.use('/api', adminRoutes);
+
+// Test route
+app.get('/test', (req, res) => {
+    console.log('Test route hit');
+    res.json({ message: 'Server is reachable' });
+});
+
 // Register applicant routes
 app.post('/api/applicants', authMiddleware, authController.registerApplicant);
 
 // Dashboard routes
 app.get('/api/dashboard', authMiddleware, adminController.getDashboard);
 
-// API routes
-app.use('/api', authRoutes);
-app.use('/api', adminRoutes);
-
-
-// Middleware to verify JWT token
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Access token required' });
-
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Invalid token' });
-        req.user = user;
-        next();
-    });
-};
-
-// Middleware to check if user is admin or super_admin
-const requireAdmin = (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
-        return res.status(403).json({ error: 'Admin access required' });
-    }
-    next();
-};
-
-// Middleware to check if user is super_admin
-const requireSuperAdmin = (req, res, next) => {
-    if (req.user.role !== 'super_admin') {
-        return res.status(403).json({ error: 'Super admin access required' });
-    }
-    next();
-};
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error('Global Error Handler:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+});
 
 
 // --- Public Routes ---
@@ -78,7 +77,7 @@ app.post('/api/register', async (req, res) => {
 // --- Admin Routes ---
 
 // Get All Applicants
-app.get('/api/admin/applicants', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/admin/applicants', authMiddleware, roleMiddleware.requireAdmin, async (req, res) => {
     // Mock data for demo
     const mockApplicants = [
         { id: '1', role: 'Influencer', full_name: 'John Doe', email: 'john@example.com', country: 'Ethiopia', status: 'pending', created_at: new Date() },
@@ -110,7 +109,7 @@ app.get('/api/stats/countries', async (req, res) => {
 });
 
 // Approve Applicant & Generate QR
-app.post('/api/admin/approve/:id', authenticateToken, requireAdmin, async (req, res) => {
+app.post('/api/admin/approve/:id', authMiddleware, roleMiddleware.requireAdmin, async (req, res) => {
     const { id } = req.params;
     const { remark } = req.body;
     // Mock approval
@@ -120,7 +119,7 @@ app.post('/api/admin/approve/:id', authenticateToken, requireAdmin, async (req, 
 });
 
 // Reject Applicant
-app.post('/api/admin/reject/:id', authenticateToken, requireAdmin, async (req, res) => {
+app.post('/api/admin/reject/:id', authMiddleware, roleMiddleware.requireAdmin, async (req, res) => {
     const { id } = req.params;
     const { remark } = req.body;
     // Mock rejection
@@ -129,14 +128,15 @@ app.post('/api/admin/reject/:id', authenticateToken, requireAdmin, async (req, r
     res.json(mockRejected);
 });
 
+
 // QR Scan Verification
-app.get('/api/admin/verify-qr/:id', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/admin/verify-qr/:id', authMiddleware, roleMiddleware.requireAdmin, async (req, res) => {
     const { id } = req.params;
     // Mock verification
     const mockApplicant = { id, full_name: 'Mock User', email: 'mock@example.com', status: 'approved' };
     res.json(mockApplicant);
 });
 
-app.listen(PORT, () => {
-    console.log(`ASMIS Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`ASMIS Server running on http://0.0.0.0:${PORT}`);
 });

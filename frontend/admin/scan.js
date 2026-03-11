@@ -16,7 +16,7 @@ scanBtn.addEventListener('click', async () => {
     if (!id) return alert('Please enter data');
 
     try {
-        const response = await fetch(`http://localhost:5000/api/admin/verify-qr/${id}`);
+        const response = await fetch(`http://localhost:5015/api/admin/verify-qr/${id}`);
         if (response.ok) {
             const data = await response.json();
             document.getElementById('resName').innerText = data.full_name;
